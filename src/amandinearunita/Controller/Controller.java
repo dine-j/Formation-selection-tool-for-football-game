@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,6 +22,7 @@ public class Controller implements ActionListener {
 
 		this.frame = frame;
 		this.currentSquad = currentSquad;
+		this.currentSquad.generate(2, 5, 5, 3);
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class Controller implements ActionListener {
 			
 			frame.addGoalkeeper();
 			
-			String selectedFormation = frame.getSelectedFOrmation();
+			String selectedFormation = frame.getSelectedFormation();
 			int numberOfDefender = 0;
 			int numberOfMidfielder = 0;
 			int numberOfStriker = 0;
@@ -60,6 +62,7 @@ public class Controller implements ActionListener {
 			}
 
 			frame.revalidate();
+			frame.repaint();
 		}
 
 		if (e.getSource().getClass().equals(JButton.class)){
@@ -90,10 +93,11 @@ public class Controller implements ActionListener {
 			}
 
 			frame.revalidate();
+			frame.repaint();
 		}
 	}
 
-	public List<Player> getListOfPlayers() {
+	public Set<Player> getListOfPlayers() {
 		return currentSquad.getListOfPlayers();
 	}
 }

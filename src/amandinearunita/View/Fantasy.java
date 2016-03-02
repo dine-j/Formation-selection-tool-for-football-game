@@ -22,7 +22,7 @@ import amandinearunita.Model.Striker;
 public class Fantasy extends JFrame {
 
 	private Controller controller;
-	private JPanel playingPanel;
+	private JPanel pitchPanel;
 	private JPanel panelGoalkeeper;
 	private JPanel panelDefender;
 	private JPanel panelMidfielder;
@@ -38,21 +38,11 @@ public class Fantasy extends JFrame {
 		setSize(400, 600);
 		setLayout(new BorderLayout());
 
-		playingPanel = new JPanel();
-		playingPanel.setLayout(new GridLayout(4, 1));
+		playerPanels = new ArrayList<JPanel>();
 
-		panelGoalkeeper = new JPanel(new FlowLayout());
-		panelDefender = new JPanel(new FlowLayout());
-		panelMidfielder = new JPanel(new FlowLayout());
-		panelStriker = new JPanel(new FlowLayout());
+		createPitchPanel();
+
 		panelBench = new JPanel(new FlowLayout());
-
-		playingPanel.add(panelGoalkeeper);
-		playingPanel.add(panelDefender);
-		playingPanel.add(panelMidfielder);
-		playingPanel.add(panelStriker);
-
-		add(playingPanel, BorderLayout.CENTER);
 		add(panelBench, BorderLayout.SOUTH);
 
 		cmboFormation = new JComboBox();
@@ -67,11 +57,26 @@ public class Fantasy extends JFrame {
 		add(cmboFormation, BorderLayout.NORTH);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		cmboFormation.addActionListener(controller);
-		playerPanels = new ArrayList<JPanel>();
 	}
 
-	private JPanel createPlayerPanel(String name, String id, String imgPath){
+	private void createPitchPanel() {
+		pitchPanel = new JPanel();
+		pitchPanel.setLayout(new GridLayout(4, 1));
+
+		panelGoalkeeper = new JPanel(new FlowLayout());
+		panelDefender = new JPanel(new FlowLayout());
+		panelMidfielder = new JPanel(new FlowLayout());
+		panelStriker = new JPanel(new FlowLayout());
+
+		pitchPanel.add(panelGoalkeeper);
+		pitchPanel.add(panelDefender);
+		pitchPanel.add(panelMidfielder);
+		pitchPanel.add(panelStriker);
+
+		add(pitchPanel, BorderLayout.CENTER);
+	}
+
+	private JPanel createIndividualPlayerPanel(String name, String id, String imgPath){
 		JPanel playerPanel= new JPanel(new BorderLayout());
 		playerPanel.setName(id);
 
@@ -88,15 +93,7 @@ public class Fantasy extends JFrame {
 			playerPanel.add(addImage, BorderLayout.CENTER);
 		}
 		else {
-			BufferedImage bfImage = null;
-			try {
-				bfImage= ImageIO.read(new File(imgPath));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			JLabel lblImage= new JLabel(new ImageIcon(bfImage));
-			lblImage.setName(id);
-			playerPanel.add(lblImage, BorderLayout.CENTER);
+			addImageToPanel(id, imgPath, playerPanel);
 		}
 		playerPanels.add(playerPanel);
 		return playerPanel; //specify the image file
@@ -118,6 +115,16 @@ public class Fantasy extends JFrame {
 		}
 	}
 
+	public void updatePlayerImage(String playerId, String path) {
+		for(JPanel panel : playerPanels) {
+			if(panel.getName().equals(playerId)) {
+				panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER));
+
+				addImageToPanel(playerId, path, panel);
+			}
+		}
+	}
+
 	public void removePlayerPanel(){
 		panelGoalkeeper.removeAll();
 		panelDefender.removeAll();
@@ -127,8 +134,9 @@ public class Fantasy extends JFrame {
 		playerPanels.clear();
 	}
 
-	public void addGoalkeeper(){
-		List<Player> goalkeepers = new ArrayList<Player>();
+	public void addGoalkeeper(String name, String id, String image){
+		panelGoalkeeper.add(createIndividualPlayerPanel(name, id, image));
+/*		List<Player> goalkeepers = new ArrayList<Player>();
 
 		for(Player player : controller.getListOfPlayers()) {
 			if(player instanceof Goalkeeper) {
@@ -139,12 +147,12 @@ public class Fantasy extends JFrame {
 		Player firstGK = goalkeepers.get(0);
 		Player benchGK = goalkeepers.get(1);
 
-		panelGoalkeeper.add(createPlayerPanel(firstGK.getName(), firstGK.getID(), firstGK.getImage()));
-		panelBench.add(createPlayerPanel(benchGK.getName(), benchGK.getID(), benchGK.getImage()));
+		panelGoalkeeper.add(createIndividualPlayerPanel(firstGK.getName(), firstGK.getID(), firstGK.getImage()));
+		panelBench.add(createIndividualPlayerPanel(benchGK.getName(), benchGK.getID(), benchGK.getImage()));*/
 	}
 
 	public void addDefender(int numberOfDefender) {
-		List<Player> defenders = new ArrayList<Player>();
+/*		List<Player> defenders = new ArrayList<Player>();
 
 		for(Player player : controller.getListOfPlayers()) {
 			if(player instanceof Defender) {
@@ -154,14 +162,14 @@ public class Fantasy extends JFrame {
 
 		for(int i = 0; i < numberOfDefender; ++i) {
 			Player defender = defenders.get(0);
-			panelDefender.add(createPlayerPanel(defender.getName(), defender.getID(), defender.getImage()));
+			panelDefender.add(createIndividualPlayerPanel(defender.getName(), defender.getID(), defender.getImage()));
 			defenders.remove(defender);
 		}
 
 		for(int i = 0; i < defenders.size(); ++i) {
 			Player defender = defenders.get(0);
-			panelBench.add(createPlayerPanel(defender.getName(), defender.getID(), defender.getImage()));
-		}
+			panelBench.add(createIndividualPlayerPanel(defender.getName(), defender.getID(), defender.getImage()));
+		}*/
 	}
 
 	public void addMidfielder(int numberOfMidfielder) {
@@ -175,13 +183,13 @@ public class Fantasy extends JFrame {
 		for(int i = 0; i < numberOfMidfielder; ++i) {
 			Player midfielder = midfielders.get(0);
 
-			panelMidfielder.add(createPlayerPanel(midfielder.getName(), midfielder.getID(), midfielder.getImage()));
+			panelMidfielder.add(createIndividualPlayerPanel(midfielder.getName(), midfielder.getID(), midfielder.getImage()));
 			midfielders.remove(midfielder);
 		}
 
 		for(int i = 0; i < midfielders.size(); ++i) {
 			Player midfielder = midfielders.get(0);
-			panelBench.add(createPlayerPanel(midfielder.getName(), midfielder.getID(), midfielder.getImage()));
+			panelBench.add(createIndividualPlayerPanel(midfielder.getName(), midfielder.getID(), midfielder.getImage()));
 		}
 	}
 
@@ -195,38 +203,35 @@ public class Fantasy extends JFrame {
 
 		for(int i = 0; i < numberOfStriker; ++i) {
 			Player striker= strikers.get(0);
-			panelStriker.add(createPlayerPanel(striker.getName(), striker.getID(), striker.getImage()));
+			panelStriker.add(createIndividualPlayerPanel(striker.getName(), striker.getID(), striker.getImage()));
 			strikers.remove(striker);
 		}
 
 		for(int i = 0; i < strikers.size(); ++i) {
 			Player striker = strikers.get(0);
-			panelBench.add(createPlayerPanel(striker.getName(), striker.getID(), striker.getImage()));
+			panelBench.add(createIndividualPlayerPanel(striker.getName(), striker.getID(), striker.getImage()));
 		}
 	}
 
-	public void updatePlayerImage(String playerId, String path) {
-		for(JPanel panel : playerPanels) {
-			if(panel.getName().equals(playerId)) {
-				BufferedImage bfImage = null;
-				try {
-					bfImage = ImageIO.read(new File(path));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				JLabel lblImage= new JLabel(new ImageIcon(bfImage));
-				lblImage.setName(playerId);
-				panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER));
-				panel.add(lblImage, BorderLayout.CENTER);
-			}
-		}
-	}
-
-	public String getSelectedFOrmation() {
+	public String getSelectedFormation() {
 		return (String) cmboFormation.getSelectedItem();
 	}
 
-	public void setActionListener(Controller controller) {
+	public void addActionListener(Controller controller) {
 		this.controller = controller;
+		cmboFormation.addActionListener(controller);
+	}
+
+	private void addImageToPanel(String playerId, String path, JPanel panel) {
+		BufferedImage bfImage = null;
+		try {
+			bfImage = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JLabel lblImage= new JLabel(new ImageIcon(bfImage));
+		lblImage.setName(playerId);
+
+		panel.add(lblImage, BorderLayout.CENTER);
 	}
 }

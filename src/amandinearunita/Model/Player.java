@@ -6,21 +6,24 @@ public class Player {
 	String id; 
 	String path;
 	
-	public Player(String name, String id, String path){
+	public Player(String name, String id, String path) {
 		this.name = name;
 		this.id = id;
 		this.path = path;
 	}
-	public Player(String name, String id){
+
+	public Player(String name, String id) {
 		this.name = name;
 		this.id = id;
 		path = "None";
 	}
-	public Player(){
+
+	public Player() {
 		name = getClass().getSimpleName();
 		id = String.valueOf(this.hashCode());
 		path = "None";
 	}
+
 	public String getName(){
 		return name; 
 	}
@@ -34,7 +37,7 @@ public class Player {
 	}
 	
 	public String toString(){
-		return name+" "+id;
+		return name + " " + id;
 	}
 
 	public void setName(String name) {

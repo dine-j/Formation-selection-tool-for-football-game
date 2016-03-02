@@ -13,8 +13,8 @@ public class Main {
 		Squad squad = new Squad();
 
 		Controller controller = new Controller(fantasy, squad);
+		fantasy.addActionListener(controller);
 
 		fantasy.setVisible(true);
 	}
-
 }
