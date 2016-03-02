@@ -76,7 +76,7 @@ public class Fantasy extends JFrame {
 		add(pitchPanel, BorderLayout.CENTER);
 	}
 
-	public void removePlayerPanel(){
+	public void removeAllPlayerPanels(){
 		panelGoalkeeper.removeAll();
 		panelDefender.removeAll();
 		panelMidfielder.removeAll();
@@ -110,13 +110,7 @@ public class Fantasy extends JFrame {
 			if(panel.getName().equals(id)) {
 				panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.SOUTH));
 
-				JTextField playerName = new JTextField(name);
-				playerName.setHorizontalAlignment(SwingConstants.CENTER);
-
-				playerName.setName(id);
-				playerName.addActionListener(controller);
-
-				panel.add(playerName, BorderLayout.SOUTH);
+				panel.add(createPlayerNameTextField(id, name), BorderLayout.SOUTH);
 			}
 		}
 	}
@@ -124,22 +118,29 @@ public class Fantasy extends JFrame {
 	public void updatePlayerImage(String playerId, String path) {
 		for(JPanel panel : playerPanels) {
 			if(panel.getName().equals(playerId)) {
-				panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER));
+				if(!((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER).getClass().equals(JLabel.class)) {
+					panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER));
 
-				addImageToPanel(playerId, path, panel);
+					addImageToPanel(playerId, path, panel);
+				}
 			}
 		}
+	}
+
+	public String getSelectedFormation() {
+		return (String) cmboFormation.getSelectedItem();
+	}
+
+	public void addActionListener(Controller controller) {
+		this.controller = controller;
+		cmboFormation.addActionListener(controller);
 	}
 
 	private JPanel createIndividualPlayerPanel(String name, String id, String imgPath){
 		JPanel playerPanel= new JPanel(new BorderLayout());
 		playerPanel.setName(id);
 
-		JTextField playerName = new JTextField(name);
-		playerName.setName(id);
-		playerName.addActionListener(controller);
-
-		playerPanel.add(playerName, BorderLayout.SOUTH);
+		playerPanel.add(createPlayerNameTextField(id, name), BorderLayout.SOUTH);
 
 		if(imgPath.equals("None")) {
 			JButton addImage = new JButton("+");
@@ -154,15 +155,6 @@ public class Fantasy extends JFrame {
 		return playerPanel; //specify the image file
 	}
 
-	public String getSelectedFormation() {
-		return (String) cmboFormation.getSelectedItem();
-	}
-
-	public void addActionListener(Controller controller) {
-		this.controller = controller;
-		cmboFormation.addActionListener(controller);
-	}
-
 	private void addImageToPanel(String playerId, String path, JPanel panel) {
 		BufferedImage bfImage = null;
 		try {
@@ -174,5 +166,14 @@ public class Fantasy extends JFrame {
 		lblImage.setName(playerId);
 
 		panel.add(lblImage, BorderLayout.CENTER);
+	}
+
+	private JTextField createPlayerNameTextField(String id, String name) {
+		JTextField playerName = new JTextField(name);
+		playerName.setHorizontalAlignment(SwingConstants.CENTER);
+
+		playerName.setName(id);
+		playerName.addActionListener(controller);
+		return playerName;
 	}
 }

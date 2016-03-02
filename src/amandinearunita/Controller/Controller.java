@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -39,7 +38,7 @@ public class Controller implements ActionListener {
 
 		if (e.getSource().getClass().equals(JComboBox.class)){
 
-			frame.removePlayerPanel();
+			frame.removeAllPlayerPanels();
 			
 			String selectedFormation = frame.getSelectedFormation();
 			int numberOfDefender = 0;
@@ -47,7 +46,7 @@ public class Controller implements ActionListener {
 			int numberOfStriker = 0;
 
 			if(selectedFormation.equals("Select formation"))
-				frame.removePlayerPanel();
+				frame.removeAllPlayerPanels();
 			else {
 				numberOfDefender = Integer.parseInt(Character.toString(selectedFormation.charAt(0)));
 				numberOfMidfielder = Integer.parseInt(Character.toString(selectedFormation.charAt(2)));
