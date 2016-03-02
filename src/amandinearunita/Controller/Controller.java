@@ -3,6 +3,7 @@ package amandinearunita.Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -11,34 +12,36 @@ import amandinearunita.Model.Player;
 import amandinearunita.Model.Squad;
 import amandinearunita.View.Fantasy;
 
-public class Controller implements ActionListener{
+public class Controller implements ActionListener {
 
-	private JComboBox formationPlayer;
 	private Fantasy frame;
+	private Squad currentSquad;
 
-	public Controller(JComboBox formationPlayer, Fantasy frame){
+	public Controller(Fantasy frame, Squad currentSquad){
 
-		this.formationPlayer = formationPlayer;
 		this.frame = frame;
+		this.currentSquad = currentSquad;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//namePlayer.contains(e.getSource())
+
 		if (e.getSource().getClass().equals(JTextField.class)){
+
 			JTextField changedField = (JTextField) e.getSource();
-			Squad currentSquad = frame.getSquad();
 			String playerId = changedField.getName();
+
 			currentSquad.searchPlayer(playerId).setName(changedField.getText());
 //			System.out.println(currentSquad.searchPlayer(playerId).getName());
 		}
-		if (e.getSource() == formationPlayer){
+
+		if (e.getSource().getClass().equals(JComboBox.class)){
 
 			frame.removePlayerPanel();
 			
 			frame.addGoalkeeper();
 			
-			String selectedFormation = (String) formationPlayer.getSelectedItem();
+			String selectedFormation = frame.getSelectedFOrmation();
 			int numberOfDefender = 0;
 			int numberOfMidfielder = 0;
 			int numberOfStriker = 0;
@@ -57,8 +60,8 @@ public class Controller implements ActionListener{
 			}
 
 			frame.revalidate();
-			frame.repaint();
-		}		
+		}
+
 		if (e.getSource().getClass().equals(JButton.class)){
 			JFileChooser chooser = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
@@ -68,11 +71,12 @@ public class Controller implements ActionListener{
 			int returnVal = chooser.showOpenDialog((JButton) e.getSource());
 
 			String playerId = ((JButton) e.getSource()).getName();
-			Squad currentSquad = frame.getSquad();
 
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
+
 				Player playerToUpdate = currentSquad.searchPlayer(playerId);
 				File imageFile = chooser.getSelectedFile();
+
 				String imagePath = imageFile.getPath();
 				String imageName = imageFile.getName();
 				String playerName = imageName.substring(0, imageName.lastIndexOf('.'));
@@ -87,5 +91,9 @@ public class Controller implements ActionListener{
 
 			frame.revalidate();
 		}
+	}
+
+	public List<Player> getListOfPlayers() {
+		return currentSquad.getListOfPlayers();
 	}
 }

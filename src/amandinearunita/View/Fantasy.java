@@ -1,7 +1,6 @@
 package amandinearunita.View;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
@@ -18,26 +17,23 @@ import amandinearunita.Model.Defender;
 import amandinearunita.Model.Goalkeeper;
 import amandinearunita.Model.Midfielder;
 import amandinearunita.Model.Player;
-import amandinearunita.Model.Squad;
 import amandinearunita.Model.Striker;
 
 public class Fantasy extends JFrame {
 
 	private Controller controller;
 	private JPanel playingPanel;
-	private Squad squad;
 	private JPanel panelGoalkeeper;
 	private JPanel panelDefender;
 	private JPanel panelMidfielder;
 	private JPanel panelStriker;
 	private JPanel panelBench;
 	private List<JPanel> playerPanels;
+	private JComboBox cmboFormation;
 
 	public Fantasy(){
 
 		super("Fantasy Football");
-
-		squad = new Squad();
 
 		setSize(400, 600);
 		setLayout(new BorderLayout());
@@ -59,7 +55,7 @@ public class Fantasy extends JFrame {
 		add(playingPanel, BorderLayout.CENTER);
 		add(panelBench, BorderLayout.SOUTH);
 
-		JComboBox cmboFormation= new JComboBox();
+		cmboFormation = new JComboBox();
 		cmboFormation.addItem("Select formation");
 		cmboFormation.addItem("4-4-2");
 		cmboFormation.addItem("4-3-3");
@@ -69,7 +65,6 @@ public class Fantasy extends JFrame {
 		cmboFormation.addItem("4-5-1");
 
 		add(cmboFormation, BorderLayout.NORTH);
-		controller = new Controller(cmboFormation, this);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cmboFormation.addActionListener(controller);
@@ -135,7 +130,7 @@ public class Fantasy extends JFrame {
 	public void addGoalkeeper(){
 		List<Player> goalkeepers = new ArrayList<Player>();
 
-		for(Player player : squad.getListOfPlayers()) {
+		for(Player player : controller.getListOfPlayers()) {
 			if(player instanceof Goalkeeper) {
 				goalkeepers.add(player);
 			}
@@ -151,7 +146,7 @@ public class Fantasy extends JFrame {
 	public void addDefender(int numberOfDefender) {
 		List<Player> defenders = new ArrayList<Player>();
 
-		for(Player player : squad.getListOfPlayers()) {
+		for(Player player : controller.getListOfPlayers()) {
 			if(player instanceof Defender) {
 				defenders.add(player);
 			}
@@ -171,7 +166,7 @@ public class Fantasy extends JFrame {
 
 	public void addMidfielder(int numberOfMidfielder) {
 		List<Player> midfielders = new ArrayList<Player>();
-		for(Player player : squad.getListOfPlayers()) {
+		for(Player player : controller.getListOfPlayers()) {
 			if(player instanceof Midfielder) {
 				midfielders.add(player);
 			}
@@ -192,7 +187,7 @@ public class Fantasy extends JFrame {
 
 	public void addStriker(int numberOfStriker) {
 		List<Player> strikers = new ArrayList<Player>();
-		for(Player player : squad.getListOfPlayers()) {
+		for(Player player : controller.getListOfPlayers()) {
 			if(player instanceof Striker) {
 				strikers.add(player);
 			}
@@ -210,10 +205,6 @@ public class Fantasy extends JFrame {
 		}
 	}
 
-	public Squad getSquad() {
-		return squad;
-	}
-
 	public void updatePlayerImage(String playerId, String path) {
 		for(JPanel panel : playerPanels) {
 			if(panel.getName().equals(playerId)) {
@@ -229,5 +220,13 @@ public class Fantasy extends JFrame {
 				panel.add(lblImage, BorderLayout.CENTER);
 			}
 		}
+	}
+
+	public String getSelectedFOrmation() {
+		return (String) cmboFormation.getSelectedItem();
+	}
+
+	public void setActionListener(Controller controller) {
+		this.controller = controller;
 	}
 }
