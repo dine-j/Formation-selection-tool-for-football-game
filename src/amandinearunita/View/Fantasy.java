@@ -13,11 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import amandinearunita.Controller.Controller;
-import amandinearunita.Model.Defender;
-import amandinearunita.Model.Goalkeeper;
-import amandinearunita.Model.Midfielder;
-import amandinearunita.Model.Player;
-import amandinearunita.Model.Striker;
 
 public class Fantasy extends JFrame {
 
@@ -42,38 +37,11 @@ public class Fantasy extends JFrame {
 
 		createPitchPanel();
 
-		panelBench = new JPanel(new FlowLayout());
-		add(panelBench, BorderLayout.SOUTH);
+		createBenchPanel();
 
-		cmboFormation = new JComboBox();
-		cmboFormation.addItem("Select formation");
-		cmboFormation.addItem("4-4-2");
-		cmboFormation.addItem("4-3-3");
-		cmboFormation.addItem("3-5-2");
-		cmboFormation.addItem("5-3-2");
-		cmboFormation.addItem("3-4-3");
-		cmboFormation.addItem("4-5-1");
-
-		add(cmboFormation, BorderLayout.NORTH);
+		createFormationSelectionBox();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	private void createPitchPanel() {
-		pitchPanel = new JPanel();
-		pitchPanel.setLayout(new GridLayout(4, 1));
-
-		panelGoalkeeper = new JPanel(new FlowLayout());
-		panelDefender = new JPanel(new FlowLayout());
-		panelMidfielder = new JPanel(new FlowLayout());
-		panelStriker = new JPanel(new FlowLayout());
-
-		pitchPanel.add(panelGoalkeeper);
-		pitchPanel.add(panelDefender);
-		pitchPanel.add(panelMidfielder);
-		pitchPanel.add(panelStriker);
-
-		add(pitchPanel, BorderLayout.CENTER);
 	}
 
 	public void removeAllPlayerPanels(){
@@ -118,6 +86,7 @@ public class Fantasy extends JFrame {
 	public void updatePlayerImage(String playerId, String path) {
 		for(JPanel panel : playerPanels) {
 			if(panel.getName().equals(playerId)) {
+				// Makes impossible to add an image to a Player more than once
 				if(!((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER).getClass().equals(JLabel.class)) {
 					panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.CENTER));
 
@@ -136,6 +105,28 @@ public class Fantasy extends JFrame {
 		cmboFormation.addActionListener(controller);
 	}
 
+	private void createPitchPanel() {
+		pitchPanel = new JPanel();
+		pitchPanel.setLayout(new GridLayout(4, 1));
+
+		panelGoalkeeper = new JPanel(new FlowLayout());
+		panelDefender = new JPanel(new FlowLayout());
+		panelMidfielder = new JPanel(new FlowLayout());
+		panelStriker = new JPanel(new FlowLayout());
+
+		pitchPanel.add(panelGoalkeeper);
+		pitchPanel.add(panelDefender);
+		pitchPanel.add(panelMidfielder);
+		pitchPanel.add(panelStriker);
+
+		add(pitchPanel, BorderLayout.CENTER);
+	}
+
+	private void createBenchPanel() {
+		panelBench = new JPanel(new FlowLayout());
+		add(panelBench, BorderLayout.SOUTH);
+	}
+
 	private JPanel createIndividualPlayerPanel(String name, String id, String imgPath){
 		JPanel playerPanel= new JPanel(new BorderLayout());
 		playerPanel.setName(id);
@@ -152,7 +143,19 @@ public class Fantasy extends JFrame {
 			addImageToPanel(id, imgPath, playerPanel);
 		}
 		playerPanels.add(playerPanel);
-		return playerPanel; //specify the image file
+		return playerPanel;
+	}
+
+	private void createFormationSelectionBox() {
+		cmboFormation = new JComboBox();
+		cmboFormation.addItem("Select formation");
+		cmboFormation.addItem("4-4-2");
+		cmboFormation.addItem("4-3-3");
+		cmboFormation.addItem("3-5-2");
+		cmboFormation.addItem("5-3-2");
+		cmboFormation.addItem("3-4-3");
+		cmboFormation.addItem("4-5-1");
+		add(cmboFormation, BorderLayout.NORTH);
 	}
 
 	private void addImageToPanel(String playerId, String path, JPanel panel) {

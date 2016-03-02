@@ -24,22 +24,37 @@ public class Controller implements ActionListener {
 		this.currentSquad.generate(2, 5, 5, 3);
 	}
 
+	/**
+	 * Method to handle dropdown box selections, button press and updates in a text field events
+	 * @param e	Action that was performed and triggered the method
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		/**
+		 * Actions to perform if the event comes from a text field update
+		 * The method takes the text input and change the name of the corresponding Player
+		 */
 		if (e.getSource().getClass().equals(JTextField.class)){
 
 			JTextField changedField = (JTextField) e.getSource();
 			String playerId = changedField.getName();
 
 			currentSquad.searchPlayer(playerId).setName(changedField.getText());
+//			This following line is for debugging purposes:
 //			System.out.println(currentSquad.searchPlayer(playerId).getName());
 		}
 
+		/**
+		 * Actions to perform if the event comes for a dropdown box selection
+		 * The method analyse the selected formation and instruct the view to create Player panels in consequence
+		 */
 		if (e.getSource().getClass().equals(JComboBox.class)){
 
+			// First, remove all Player panels
 			frame.removeAllPlayerPanels();
-			
+
+			// Analysis of the selected formation
 			String selectedFormation = frame.getSelectedFormation();
 			int numberOfDefender = 0;
 			int numberOfMidfielder = 0;
@@ -78,6 +93,7 @@ public class Controller implements ActionListener {
 					}
 				}
 
+				// Instructions for the view
 				for(Goalkeeper goalkeeper : goalkeepers) {
 					frame.addGoalkeeper(goalkeeper.getName(), goalkeeper.getID(), goalkeeper.getImage());
 				}
@@ -99,7 +115,12 @@ public class Controller implements ActionListener {
 			frame.repaint();
 		}
 
+		/**
+		 * Action to perform if the event comes from a button press
+		 * Open a window to allow the user to choose an image file and update the corresponding Player and the view
+		 */
 		if (e.getSource().getClass().equals(JButton.class)){
+			// Open a window to choose a file
 			JFileChooser chooser = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
 
@@ -109,6 +130,7 @@ public class Controller implements ActionListener {
 
 			String playerId = ((JButton) e.getSource()).getName();
 
+			// Update the Player and the view
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 
 				Player playerToUpdate = currentSquad.searchPlayer(playerId);
