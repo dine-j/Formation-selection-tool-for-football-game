@@ -2,16 +2,17 @@ package amandinearunita.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.io.File;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import amandinearunita.Model.Player;
 import amandinearunita.Model.Squad;
 import amandinearunita.View.Fantasy;
-import javafx.stage.FileChooser;
 
 public class Controller implements ActionListener{
+
 	private JComboBox formationPlayer;
 	private Fantasy frame;
 
@@ -48,25 +49,41 @@ public class Controller implements ActionListener{
 				numberOfDefender = Integer.parseInt(Character.toString(selectedFormation.charAt(0)));
 				numberOfMidfielder = Integer.parseInt(Character.toString(selectedFormation.charAt(2)));
 				numberOfStriker = Integer.parseInt(Character.toString(selectedFormation.charAt(4)));
+
+
+				frame.addDefender(numberOfDefender);
+				frame.addMidfielder(numberOfMidfielder);
+				frame.addStriker(numberOfStriker);
 			}
 
-			frame.addDefender(numberOfDefender);
-			frame.addMidfielder(numberOfMidfielder);
-			frame.addStriker(numberOfStriker);
 			frame.revalidate();
 			frame.repaint();
 		}		
 		if (e.getSource().getClass().equals(JButton.class)){
 			JFileChooser chooser = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
+
 			chooser.setFileFilter(filter);
+
 			int returnVal = chooser.showOpenDialog((JButton) e.getSource());
+
 			String playerId = ((JButton) e.getSource()).getName();
 			Squad currentSquad = frame.getSquad();
+
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
-				currentSquad.searchPlayer(playerId).setImage(chooser.getSelectedFile().getPath());
+				Player playerToUpdate = currentSquad.searchPlayer(playerId);
+				File imageFile = chooser.getSelectedFile();
+				String imagePath = imageFile.getPath();
+				String imageName = imageFile.getName();
+
+				playerToUpdate.setImage(imagePath);
+				playerToUpdate.setName(imageName.substring(0, imageName.lastIndexOf('.')));
+
+				frame.updatePlayerImage(playerId, imagePath);
+				frame.updatePlayerName(playerId, imageName);
 			}
+
+			frame.revalidate();
 		}
-		//make the view not select the same player twice for different positions 
 	}
 }
