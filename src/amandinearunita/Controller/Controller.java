@@ -75,12 +75,14 @@ public class Controller implements ActionListener{
 				File imageFile = chooser.getSelectedFile();
 				String imagePath = imageFile.getPath();
 				String imageName = imageFile.getName();
+				String playerName = imageName.substring(0, imageName.lastIndexOf('.'));
+				playerName = playerName.substring(0, 1).toUpperCase() + playerName.substring(1);
 
 				playerToUpdate.setImage(imagePath);
-				playerToUpdate.setName(imageName.substring(0, imageName.lastIndexOf('.')));
+				playerToUpdate.setName(playerName);
 
 				frame.updatePlayerImage(playerId, imagePath);
-				frame.updatePlayerName(playerId, imageName);
+				frame.updatePlayerName(playerId, playerName);
 			}
 
 			frame.revalidate();

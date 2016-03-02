@@ -113,6 +113,7 @@ public class Fantasy extends JFrame {
 				panel.remove(((BorderLayout) panel.getLayout()).getLayoutComponent(BorderLayout.SOUTH));
 
 				JTextField playerName = new JTextField(name);
+				playerName.setHorizontalAlignment(SwingConstants.CENTER);
 
 				playerName.setName(id);
 				playerName.addActionListener(controller);
