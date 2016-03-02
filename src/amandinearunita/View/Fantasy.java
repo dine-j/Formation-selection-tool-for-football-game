@@ -76,27 +76,33 @@ public class Fantasy extends JFrame {
 		add(pitchPanel, BorderLayout.CENTER);
 	}
 
-	private JPanel createIndividualPlayerPanel(String name, String id, String imgPath){
-		JPanel playerPanel= new JPanel(new BorderLayout());
-		playerPanel.setName(id);
+	public void removePlayerPanel(){
+		panelGoalkeeper.removeAll();
+		panelDefender.removeAll();
+		panelMidfielder.removeAll();
+		panelStriker.removeAll();
+		panelBench.removeAll();
+		playerPanels.clear();
+	}
 
-		JTextField playerName = new JTextField(name);
-		playerName.setName(id);
-		playerName.addActionListener(controller);
+	public void addGoalkeeper(String name, String id, String image){
+		panelGoalkeeper.add(createIndividualPlayerPanel(name, id, image));
+	}
 
-		playerPanel.add(playerName, BorderLayout.SOUTH);
+	public void addDefender(String name, String id, String image) {
+		panelDefender.add(createIndividualPlayerPanel(name, id, image));
+	}
 
-		if(imgPath.equals("None")) {
-			JButton addImage = new JButton("+");
-			addImage.setName(id);
-			addImage.addActionListener(controller);
-			playerPanel.add(addImage, BorderLayout.CENTER);
-		}
-		else {
-			addImageToPanel(id, imgPath, playerPanel);
-		}
-		playerPanels.add(playerPanel);
-		return playerPanel; //specify the image file
+	public void addMidfielder(String name, String id, String image) {
+		panelMidfielder.add(createIndividualPlayerPanel(name, id, image));
+	}
+
+	public void addStriker(String name, String id, String image) {
+		panelStriker.add(createIndividualPlayerPanel(name, id, image));
+	}
+
+	public void addToBench(String name, String id, String image) {
+		panelBench.add(createIndividualPlayerPanel(name, id, image));
 	}
 
 	public void updatePlayerName(String id, String name){
@@ -125,92 +131,27 @@ public class Fantasy extends JFrame {
 		}
 	}
 
-	public void removePlayerPanel(){
-		panelGoalkeeper.removeAll();
-		panelDefender.removeAll();
-		panelMidfielder.removeAll();
-		panelStriker.removeAll();
-		panelBench.removeAll();
-		playerPanels.clear();
-	}
+	private JPanel createIndividualPlayerPanel(String name, String id, String imgPath){
+		JPanel playerPanel= new JPanel(new BorderLayout());
+		playerPanel.setName(id);
 
-	public void addGoalkeeper(String name, String id, String image){
-		panelGoalkeeper.add(createIndividualPlayerPanel(name, id, image));
-/*		List<Player> goalkeepers = new ArrayList<Player>();
+		JTextField playerName = new JTextField(name);
+		playerName.setName(id);
+		playerName.addActionListener(controller);
 
-		for(Player player : controller.getListOfPlayers()) {
-			if(player instanceof Goalkeeper) {
-				goalkeepers.add(player);
-			}
+		playerPanel.add(playerName, BorderLayout.SOUTH);
+
+		if(imgPath.equals("None")) {
+			JButton addImage = new JButton("+");
+			addImage.setName(id);
+			addImage.addActionListener(controller);
+			playerPanel.add(addImage, BorderLayout.CENTER);
 		}
-
-		Player firstGK = goalkeepers.get(0);
-		Player benchGK = goalkeepers.get(1);
-
-		panelGoalkeeper.add(createIndividualPlayerPanel(firstGK.getName(), firstGK.getID(), firstGK.getImage()));
-		panelBench.add(createIndividualPlayerPanel(benchGK.getName(), benchGK.getID(), benchGK.getImage()));*/
-	}
-
-	public void addDefender(int numberOfDefender) {
-/*		List<Player> defenders = new ArrayList<Player>();
-
-		for(Player player : controller.getListOfPlayers()) {
-			if(player instanceof Defender) {
-				defenders.add(player);
-			}
+		else {
+			addImageToPanel(id, imgPath, playerPanel);
 		}
-
-		for(int i = 0; i < numberOfDefender; ++i) {
-			Player defender = defenders.get(0);
-			panelDefender.add(createIndividualPlayerPanel(defender.getName(), defender.getID(), defender.getImage()));
-			defenders.remove(defender);
-		}
-
-		for(int i = 0; i < defenders.size(); ++i) {
-			Player defender = defenders.get(0);
-			panelBench.add(createIndividualPlayerPanel(defender.getName(), defender.getID(), defender.getImage()));
-		}*/
-	}
-
-	public void addMidfielder(int numberOfMidfielder) {
-		List<Player> midfielders = new ArrayList<Player>();
-		for(Player player : controller.getListOfPlayers()) {
-			if(player instanceof Midfielder) {
-				midfielders.add(player);
-			}
-		}
-
-		for(int i = 0; i < numberOfMidfielder; ++i) {
-			Player midfielder = midfielders.get(0);
-
-			panelMidfielder.add(createIndividualPlayerPanel(midfielder.getName(), midfielder.getID(), midfielder.getImage()));
-			midfielders.remove(midfielder);
-		}
-
-		for(int i = 0; i < midfielders.size(); ++i) {
-			Player midfielder = midfielders.get(0);
-			panelBench.add(createIndividualPlayerPanel(midfielder.getName(), midfielder.getID(), midfielder.getImage()));
-		}
-	}
-
-	public void addStriker(int numberOfStriker) {
-		List<Player> strikers = new ArrayList<Player>();
-		for(Player player : controller.getListOfPlayers()) {
-			if(player instanceof Striker) {
-				strikers.add(player);
-			}
-		}
-
-		for(int i = 0; i < numberOfStriker; ++i) {
-			Player striker= strikers.get(0);
-			panelStriker.add(createIndividualPlayerPanel(striker.getName(), striker.getID(), striker.getImage()));
-			strikers.remove(striker);
-		}
-
-		for(int i = 0; i < strikers.size(); ++i) {
-			Player striker = strikers.get(0);
-			panelBench.add(createIndividualPlayerPanel(striker.getName(), striker.getID(), striker.getImage()));
-		}
+		playerPanels.add(playerPanel);
+		return playerPanel; //specify the image file
 	}
 
 	public String getSelectedFormation() {

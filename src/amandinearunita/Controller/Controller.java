@@ -3,14 +3,14 @@ package amandinearunita.Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import amandinearunita.Model.Player;
-import amandinearunita.Model.Squad;
+import amandinearunita.Model.*;
 import amandinearunita.View.Fantasy;
 
 public class Controller implements ActionListener {
@@ -41,8 +41,6 @@ public class Controller implements ActionListener {
 
 			frame.removePlayerPanel();
 			
-			frame.addGoalkeeper();
-			
 			String selectedFormation = frame.getSelectedFormation();
 			int numberOfDefender = 0;
 			int numberOfMidfielder = 0;
@@ -55,10 +53,47 @@ public class Controller implements ActionListener {
 				numberOfMidfielder = Integer.parseInt(Character.toString(selectedFormation.charAt(2)));
 				numberOfStriker = Integer.parseInt(Character.toString(selectedFormation.charAt(4)));
 
+				Set<Player> listOfPlayers = currentSquad.getListOfPlayers();
+				Set<Player> availablePlayer = new HashSet<Player>(listOfPlayers);
+				Set<Goalkeeper> goalkeepers = new HashSet<Goalkeeper>();
+				Set<Defender> defenders = new HashSet<Defender>();
+				Set<Midfielder> midfielders = new HashSet<Midfielder>();
+				Set<Striker> strikers = new HashSet<Striker>();
 
-				frame.addDefender(numberOfDefender);
-				frame.addMidfielder(numberOfMidfielder);
-				frame.addStriker(numberOfStriker);
+				for(Player player : listOfPlayers) {
+					if(player instanceof Goalkeeper && goalkeepers.size() < 1) {
+						goalkeepers.add((Goalkeeper) player);
+						availablePlayer.remove(player);
+					}
+					if(player instanceof Defender && defenders.size() < numberOfDefender) {
+						defenders.add((Defender) player);
+						availablePlayer.remove(player);
+					}
+					if(player instanceof Midfielder && midfielders.size() < numberOfMidfielder) {
+						midfielders.add((Midfielder) player);
+						availablePlayer.remove(player);
+					}
+					if(player instanceof Striker && strikers.size() < numberOfStriker) {
+						strikers.add((Striker) player);
+						availablePlayer.remove(player);
+					}
+				}
+
+				for(Goalkeeper goalkeeper : goalkeepers) {
+					frame.addGoalkeeper(goalkeeper.getName(), goalkeeper.getID(), goalkeeper.getImage());
+				}
+				for(Defender defender : defenders) {
+					frame.addDefender(defender.getName(), defender.getID(), defender.getImage());
+				}
+				for(Midfielder midfielder : midfielders) {
+					frame.addMidfielder(midfielder.getName(), midfielder.getID(), midfielder.getImage());
+				}
+				for(Striker striker : strikers) {
+					frame.addStriker(striker.getName(), striker.getID(), striker.getImage());
+				}
+				for(Player player : availablePlayer) {
+					frame.addToBench(player.getName(), player.getID(), player.getImage());
+				}
 			}
 
 			frame.revalidate();
