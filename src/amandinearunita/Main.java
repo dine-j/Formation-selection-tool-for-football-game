@@ -1,8 +1,8 @@
 package amandinearunita;
 
-import amandinearunita.Controller.Controller;
-import amandinearunita.Model.Squad;
-import amandinearunita.View.Fantasy;
+import amandinearunita.controller.Controller;
+import amandinearunita.model.Squad;
+import amandinearunita.view.Fantasy;
 
 public class Main {
 
